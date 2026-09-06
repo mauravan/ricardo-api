@@ -1,10 +1,8 @@
 export { categories } from "./categories";
 export { getFeaturedCategories } from "./getFeaturedCategories";
 export { getListingDetails } from "./getListingDetails";
-export { getPublicAccountInfo } from "./getPublicAccountInfo";
 export { getSearchSuggestions } from "./getSearchSuggestions";
 export { searchListingsByQuery } from "./searchListingsByQuery";
 export { searchListingsByToken } from "./searchListingsByToken";
-export { searchListingsByUser } from "./searchListingsByUser";
 export { searchLocalities } from "./searchLocalities";
 export { updateFilters } from "./updateFilters";

@@ -38,9 +38,7 @@ async function main(): Promise<void> {
   console.log(
     `\nSaved session "${SESSION_KEY}". Stored keys: ${JSON.stringify(await store.keys())}`,
   );
-  console.log(
-    "Other demos will now load it (e.g. `npm run demo:queries`, `npm run demo:messages`).",
-  );
+  console.log("Other demos will now load it (e.g. `npm run demo:queries`).");
 }
 
 main().catch((err) => {

@@ -12,7 +12,7 @@
   </a>
 </p>
 
-> 🌐 Unofficial, dependency-free TypeScript client for the (reverse-engineered) private API of [ricardo.ch](https://www.ricardo.ch): search & filters, listings, seller profiles, categories, suggestions, live messaging, and Auth0 login.
+> 🌐 Unofficial, dependency-free TypeScript client for the (reverse-engineered) private API of [ricardo.ch](https://www.ricardo.ch): search & filters, listings, categories, suggestions, and Auth0 login.
 
 > ⚠️ **Not affiliated with ricardo.ch.** Reverse-engineered for interoperability and research. Respect ricardo.ch's terms of service and rate limits — use at your own risk.
 ### 🏠 [Homepage](https://github.com/mauravan/ricardo-api)
@@ -27,8 +27,7 @@
 ## Features
 
 - 🔍 Fluent **search** with filters (category, price, location, intervals, single/multi-select) + cursor pagination
-- 📦 **Listings**, seller **profiles**, **categories**, featured categories, search **suggestions**
-- 💬 Live **messaging** — conversation & message streams as async iterators (send, read receipts, start a chat)
+- 📦 **Listings**, **categories**, featured categories, search **suggestions**
 - 🔐 **Auth0 login** (authorization-code + PKCE) with a swappable captcha provider (manual, or Google Gemini vision)
 - 🖼️ Built-in **dependency-free SVG→PNG** engine (renders the login captcha for OCR)
 - 💾 Pluggable **session persistence** (in-memory / file / your own store)
@@ -54,7 +53,7 @@ const result = await client
   .search("ledersofa")
   .category("furniture")
   .price({ min: 100, max: 5000 }) // or .freeOnly()
-  .location(locality) // from client.localities.search()
+  .location(locality)
   .select("companyAd", "private") // generic single-select
   .multiSelect("language", ["de"]) // generic multi-select
   .interval("year", { min: 2015 }) // generic numeric range
@@ -69,19 +68,16 @@ for await (const l of result.paginate()) {
   /* every listing across pages */
 }
 
-// Listing detail + locality autocomplete + token browse
+// Listing detail + token browse
 const listing = await client.listings.get("81078697");
-const locs = await client.localities.search("zür");
 const page = await client.browse(searchToken).fetch();
 
 // Filters for a category without fetching a listings page
 const { availableFilters } = await client.search().category("cars").updateFilters();
 
-// Categories, featured, seller profiles, autocomplete
+// Categories, featured, autocomplete
 await client.categories.tree();
 await client.categories.featured();
-await client.profiles.get(publicAccountID);
-await client.profiles.listings(publicAccountID, { offset: 0, size: 30 });
 await client.suggestions.search("sof");
 ```
 
@@ -116,24 +112,8 @@ const snap = await store.load("alice"); // restore later, no re-login
 const restored = new RicardoClient({ session: snap ? Session.fromJSON(snap) : undefined });
 ```
 
-### Messaging
-
-Live chat is streamed as NDJSON over a long-lived request, exposed as **async iterators** (backlog first, then live). Requires an authenticated session.
-
-```ts
-const ac = new AbortController();
-for await (const m of client.messaging.streamMessages(convId, { signal: ac.signal })) {
-  const mine = m.senderPublicAccountId === client.session.auth?.accountId;
-  console.log(mine ? "→" : "←", m.content.text);
-}
-// ac.abort() to stop
-
-await client.messaging.send(convId, "Hello!");
-await client.messaging.markRead(convId, offset);
-await client.messaging.reply({ itemId, name, email, body }); // start a chat from a listing
-```
-
 ## Demos
+
 
 Store a session once; every demo loads it from `./.ricardo-sessions` (gitignored):
 
@@ -142,10 +122,8 @@ Store a session once; every demo loads it from `./.ricardo-sessions` (gitignored
 RICARDO_TOKEN=<X-Ricardo-Auth> npm run demo:session
 #   or: GEMINI_API_KEY=… RICARDO_USER=… RICARDO_PASS=… npm run demo:session
 
-# 2) the rest load it (anonymous fallback if none)
 npm run demo            # search "ubiquiti" + pagination
-npm run demo:queries    # categories, featured, suggestions, updateFilters, profiles
-npm run demo:messages   # live conversation + message streams (needs auth)
+npm run demo:queries    # categories, featured, suggestions, updateFilters
 ```
 
 ## Scripts

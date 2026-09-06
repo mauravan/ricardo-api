@@ -100,12 +100,6 @@ export class AccountResource {
       throw err;
     }
   }
-
-  /** The signed-in account's profile (requires an authenticated session). */
-  profile(): Promise<unknown> {
-    return this.http.request("GET", "/account/profile.json");
-  }
-
   logout(): void {
     this.session.clearAuth();
   }

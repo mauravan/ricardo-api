@@ -3,10 +3,8 @@ import { HttpClient } from "./core/http";
 import { AccountResource } from "./resources/account";
 import { CategoriesResource } from "./resources/categories";
 import { ListingsResource } from "./resources/listings";
-import { LocalitiesResource } from "./resources/localities";
-import { MessagingResource } from "./resources/messaging";
-import { ProfilesResource } from "./resources/profiles";
 import { SuggestionsResource } from "./resources/suggestions";
+
 import { SearchBuilder } from "./search/builder";
 import { Session, type SessionOptions } from "./session/session";
 
@@ -31,11 +29,8 @@ export class RicardoClient {
   readonly session: Session;
   readonly http: HttpClient;
   readonly listings: ListingsResource;
-  readonly localities: LocalitiesResource;
   readonly account: AccountResource;
-  readonly messaging: MessagingResource;
   readonly categories: CategoriesResource;
-  readonly profiles: ProfilesResource;
   readonly suggestions: SuggestionsResource;
 
   constructor(options: RicardoClientOptions = {}) {
@@ -64,18 +59,14 @@ export class RicardoClient {
     });
 
     const oauth: OAuthConfig = { ...DEFAULT_OAUTH, ...options.oauth };
-
     this.listings = new ListingsResource(this.http);
-    this.localities = new LocalitiesResource(this.http);
     this.account = new AccountResource(
       this.http,
       this.session,
       fetchImpl,
       oauth,
     );
-    this.messaging = new MessagingResource(this.http);
     this.categories = new CategoriesResource(this.http);
-    this.profiles = new ProfilesResource(this.http);
     this.suggestions = new SuggestionsResource(this.http, this.session);
   }
 

@@ -2,8 +2,7 @@
  * Unofficial TypeScript client for the (reverse-engineered) ricardo.ch API.
  *
  * Entry point: {@link RicardoClient}. Search via {@link SearchBuilder}, read
- * listings/profiles/categories/suggestions, stream chat via
- * {@link MessagingResource}, authenticate via {@link AccountResource}
+ * listings/categories/suggestions, authenticate via {@link AccountResource}
  * (Auth0 + swappable {@link CaptchaProvider}), and persist sessions with a
  * {@link SessionStore}.
  *
@@ -50,16 +49,6 @@ export {
 } from "./resources/account";
 export { CategoriesResource } from "./resources/categories";
 export { ListingsResource } from "./resources/listings";
-export { LocalitiesResource } from "./resources/localities";
-export {
-  MessagingResource,
-  type ReplyOptions,
-  type StreamOptions,
-} from "./resources/messaging";
-export {
-  ProfilesResource,
-  type UserListingsOptions,
-} from "./resources/profiles";
 export {
   type SuggestionOptions,
   SuggestionsResource,

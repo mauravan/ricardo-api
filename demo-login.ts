@@ -34,9 +34,6 @@ async function main(): Promise<void> {
   await store.save(SESSION_KEY, client.session.toJSON());
   console.log(`Session saved as "${SESSION_KEY}" — other demos will load it.`);
 
-  const profile = await client.account.profile();
-  console.log(`\nProfile: ${JSON.stringify(profile).slice(0, 300)}`);
-
   const res = await client.search("ubiquiti").fetch();
   console.log(`\nAuthenticated search "ubiquiti": ${res.totalCount} matches`);
 }

@@ -49,28 +49,7 @@ async function main(): Promise<void> {
   console.log(
     `updateFilters(39091): totalCount=${totalCount}, filters=[${filterNames.join(", ")}]`,
   );
-
-  // Seller profile + their listings — use the session account, else a seller from search
-  let accountId = client.session.auth?.accountId;
-  if (!accountId) {
-    const res = await client.search("ubiquiti").fetch();
-    accountId = res.listings.find((l) => l.sellerInfo?.publicAccountID)
-      ?.sellerInfo?.publicAccountID;
-  }
-  if (accountId) {
-    const profile = (await client.profiles.get(accountId)) as {
-      accountName?: string;
-    };
-    console.log(
-      `profiles.get(${accountId}): ${profile?.accountName ?? JSON.stringify(profile).slice(0, 120)}`,
-    );
-    const userListings = await client.profiles.listings(accountId, { size: 5 });
-    console.log(
-      `profiles.listings(${accountId}): ${JSON.stringify(userListings).slice(0, 140)}`,
-    );
-  } else {
-    console.log("profiles: no account id available to demo");
-  }
+  // seller profiles removed — no verified endpoint
 }
 
 main().catch((err) => {
