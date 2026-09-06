@@ -1,0 +1,68 @@
+{
+  "name": "ricardo-api",
+  "version": "2.1.1",
+  "description": "Unofficial TypeScript client for the (reverse-engineered) ricardo.ch API \u2014 search, listings, seller profiles, categories, suggestions, messaging, and Auth0 login.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check --write .",
+    "ci": "biome ci .",
+    "docs": "typedoc",
+    "demo": "tsx demo.ts",
+    "demo:session": "tsx demo-session.ts",
+    "demo:queries": "tsx demo-queries.ts",
+    "demo:login": "tsx demo-login.ts",
+    "demo:login:llm": "tsx demo-login-llm.ts",
+    "demo:messages": "tsx demo-messages.ts"
+  },
+  "keywords": [
+    "ricardo",
+    "ricardo.ch",
+    "api",
+    "client",
+    "graphql",
+    "search",
+    "messaging",
+    "auth0",
+    "reverse-engineered",
+    "switzerland",
+    "classifieds"
+  ],
+  "author": "mauravan",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mauravan/ricardo-api.git"
+  },
+  "homepage": "https://mauravan.github.io/ricardo-api/",
+  "bugs": {
+    "url": "https://github.com/mauravan/ricardo-api/issues"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.0",
+    "@types/node": "^22.0.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.0.0",
+    "typedoc": "^0.28.19",
+    "typescript": "^5.5.0"
+  }
+}
