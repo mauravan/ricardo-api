@@ -169,6 +169,10 @@ npm run docs        # generate API docs (TypeDoc) into docs/
 
 * Github: [@mauravan](https://github.com/mauravan)
 
+## Acknowledgments
+
+Heavily inspired by [filippofinke/tutti-api](https://github.com/filippofinke/tutti-api) — the original reverse-engineered API client for tutti.ch that pioneered much of the approach reused here.
+
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!<br />
