@@ -1,0 +1,59 @@
+/**
+ * Demo: search ricardo.ch for "ubiquiti" via mobile POST /m/search (filtered).
+ * Run:  npm install  &&  npm run demo
+ *
+ * Uses filtered search (POST /m/search) — totalCount is filtered (<10k) not global ~3.6M.
+ */
+import { RicardoClient } from "./src/index";
+
+async function main(): Promise<void> {
+  const client = new RicardoClient();
+
+  console.log(
+    'Searching ricardo.ch for "ubiquiti" (filtered via POST /m/search)…\n',
+  );
+
+  const result = await client
+    .search("ubiquiti")
+    .sort("timestamp", "desc")
+    .fetch();
+
+  console.log(
+    `Total matches: ${result.totalCount} (filtered, not global 3.6M)`,
+  );
+  console.log(`First page:    ${result.listings.length} listings\n`);
+
+  for (const l of result.listings.slice(0, 10)) {
+    const loc = l.postcodeInformation;
+    const place = loc
+      ? `${loc.postcode ?? ""} ${loc.locationName ?? ""}`.trim()
+      : "";
+    console.log(`• [${l.listingID}] ${l.title}`);
+    console.log(
+      `    ${l.formattedPrice ?? "—"}   ${place}   ${l.timestamp ?? ""}`,
+    );
+  }
+
+  const filters = (result.availableFilters as any[]).map(
+    (f: any) => f.name ?? f.key ?? f,
+  );
+  if (filters.length) console.log(`\nAvailable filters: ${filters.join(", ")}`);
+
+  // Auto-pagination across pages (capped so the demo stays short).
+  console.log("\nAuto-paginating (up to 25 results across pages):");
+  let n = 0;
+  for await (const listing of result.paginate()) {
+    n += 1;
+    console.log(
+      `  ${String(n).padStart(2)}. ${listing.title} — ${listing.formattedPrice ?? "—"}`,
+    );
+    if (n >= 25) break;
+  }
+
+  console.log("\nDone.");
+}
+
+main().catch((err) => {
+  console.error("Demo failed:", err);
+  process.exit(1);
+});

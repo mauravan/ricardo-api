@@ -1,0 +1,15 @@
+node_modules/
+dist/
+docs/*
+!docs/captures/
+!docs/captures/**
+*.log
+.DS_Store
+
+
+
+# large binary captures - exclude from repo (push would hang)
+docs/captures/ricardo.apkm
+docs/captures/www.ricardo-full*.har
+docs/captures/www.ricardo.ch.har
+docs/captures/mobile.har

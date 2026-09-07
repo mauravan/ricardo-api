@@ -1,0 +1,59 @@
+{
+  "name": "ricardo-api",
+  "version": "2.1.1",
+  "description": "Dependency-free TypeScript client for ricardo.ch — keyword and category search, listings, categories, and search suggestions.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check --write .",
+    "ci": "biome ci .",
+    "docs": "typedoc",
+    "demo": "tsx demo.ts",
+    "demo:queries": "tsx demo-queries.ts"
+  },
+  "keywords": [
+    "ricardo",
+    "ricardo.ch",
+    "search",
+    "api",
+    "switzerland",
+    "classifieds"
+  ],
+  "author": "mauravan",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mauravan/ricardo-api.git"
+  },
+  "homepage": "https://mauravan.github.io/ricardo-api/",
+  "bugs": {
+    "url": "https://github.com/mauravan/ricardo-api/issues"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.0",
+    "@types/node": "^22.0.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.0.0",
+    "typedoc": "^0.28.19",
+    "typescript": "^5.5.0"
+  }
+}
