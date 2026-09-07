@@ -1,12 +1,14 @@
-import { DEFAULT_OAUTH, type OAuthConfig, type RawFetch } from "./auth/login";
+import { RicardoValidationError } from "./core/errors";
 import { HttpClient } from "./core/http";
-import { AccountResource } from "./resources/account";
+import { TokenBucket } from "./core/rate-limit";
 import { CategoriesResource } from "./resources/categories";
 import { ListingsResource } from "./resources/listings";
 import { SuggestionsResource } from "./resources/suggestions";
 
 import { SearchBuilder } from "./search/builder";
 import { Session, type SessionOptions } from "./session/session";
+
+export type RawFetch = typeof fetch;
 
 export interface RicardoClientOptions extends SessionOptions {
   /** Default: https://api.ricardo.ch (verified mobile) */
@@ -15,23 +17,32 @@ export interface RicardoClientOptions extends SessionOptions {
   apiVersion?: string;
   /** Inject a custom fetch (proxy, mocking). Default: global fetch. */
   fetch?: RawFetch;
-  /** Override Auth0/OAuth parameters (client id, hosts, scope, …). */
-  oauth?: Partial<OAuthConfig>;
-  /** Provide a pre-built/restored session instead of the *Options fields. */
+  /** Provide a pre-built Session instead of the *Options fields. */
   session?: Session;
+  /**
+   * Client-level rate limiter. Token-bucket algorithm; requests beyond the
+   * sustained throughput wait transparently until a token is free.
+   * Default: `{ tokensPerSecond: 5, burst: 10 }`. Pass `false` to disable.
+   */
+  rateLimit?:
+    | false
+    | {
+        tokensPerSecond?: number;
+        burst?: number;
+      };
 }
 
 /**
- * Entry point. One instance = one session/account. Compose more accounts by
- * constructing more clients (optionally from `Session.fromJSON`).
+ * Entry point. One instance = one anonymous client. Pass your own `Session`
+ * to customise the device hash, app identity headers, and language.
  */
 export class RicardoClient {
   readonly session: Session;
   readonly http: HttpClient;
   readonly listings: ListingsResource;
-  readonly account: AccountResource;
   readonly categories: CategoriesResource;
   readonly suggestions: SuggestionsResource;
+  readonly limiter?: TokenBucket;
 
   constructor(options: RicardoClientOptions = {}) {
     const fetchImpl =
@@ -48,26 +59,36 @@ export class RicardoClient {
         ricardoHash: options.ricardoHash,
         app: options.app,
         language: options.language,
-        auth: options.auth,
       });
+
+    const rl = options.rateLimit;
+    if (rl !== false) {
+      const tokensPerSecond = rl?.tokensPerSecond ?? 5;
+      const burst = rl?.burst ?? 10;
+      if (!Number.isFinite(tokensPerSecond) || tokensPerSecond <= 0) {
+        throw new RicardoValidationError(
+          `rateLimit.tokensPerSecond must be a finite number > 0 (got ${tokensPerSecond})`,
+        );
+      }
+      if (!Number.isFinite(burst) || !Number.isInteger(burst) || burst < 1) {
+        throw new RicardoValidationError(
+          `rateLimit.burst must be a finite integer >= 1 (got ${burst})`,
+        );
+      }
+      this.limiter = new TokenBucket({ tokensPerSecond, burst });
+    }
 
     this.http = new HttpClient({
       baseURL: options.baseURL ?? "https://api.ricardo.ch",
       apiVersion: options.apiVersion ?? "m",
       session: this.session,
       fetch: fetchImpl,
+      limiter: this.limiter,
     });
 
-    const oauth: OAuthConfig = { ...DEFAULT_OAUTH, ...options.oauth };
     this.listings = new ListingsResource(this.http);
-    this.account = new AccountResource(
-      this.http,
-      this.session,
-      fetchImpl,
-      oauth,
-    );
     this.categories = new CategoriesResource(this.http);
-    this.suggestions = new SuggestionsResource(this.http, this.session);
+    this.suggestions = new SuggestionsResource(this.http);
   }
 
   /** Keyword/category/filter search. `search('sofa').category('furniture')...` */

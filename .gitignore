@@ -6,12 +6,7 @@ docs/*
 *.log
 .DS_Store
 
-# captcha images saved at runtime by ManualCaptchaProvider
-ricardo-captcha.*
-captcha-*.svg
 
-# stored sessions (contain auth tokens)
-.ricardo-sessions/
 
 # large binary captures - exclude from repo (push would hang)
 docs/captures/ricardo.apkm

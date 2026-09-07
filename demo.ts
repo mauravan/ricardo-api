@@ -1,15 +1,13 @@
 /**
  * Demo: search ricardo.ch for "ubiquiti" via mobile POST /m/search (filtered).
- * Run:  npm install  &&  npm run demo   (loads the stored session if present)
+ * Run:  npm install  &&  npm run demo
  *
- * Hits the real api.ricardo.ch directly over HTTPS (no proxy/pinning bypass
- * needed — pinning only affected the Android app, not a plain Node fetch).
- * Now uses filtered search (POST /m/search) — totalCount is filtered (<10k) not global ~3.6M.
+ * Uses filtered search (POST /m/search) — totalCount is filtered (<10k) not global ~3.6M.
  */
-import { loadClient } from "./demo-shared";
+import { RicardoClient } from "./src/index";
 
 async function main(): Promise<void> {
-  const client = await loadClient();
+  const client = new RicardoClient();
 
   console.log(
     'Searching ricardo.ch for "ubiquiti" (filtered via POST /m/search)…\n',

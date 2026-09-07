@@ -1,7 +1,7 @@
 {
   "name": "ricardo-api",
   "version": "2.1.1",
-  "description": "Unofficial TypeScript client for the (reverse-engineered) ricardo.ch API — search, listings, categories, suggestions, and Auth0 login.",
+  "description": "Dependency-free TypeScript client for ricardo.ch — keyword and category search, listings, categories, and search suggestions.",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -28,20 +28,13 @@
     "ci": "biome ci .",
     "docs": "typedoc",
     "demo": "tsx demo.ts",
-    "demo:session": "tsx demo-session.ts",
-    "demo:queries": "tsx demo-queries.ts",
-    "demo:login": "tsx demo-login.ts",
-    "demo:login:llm": "tsx demo-login-llm.ts"
+    "demo:queries": "tsx demo-queries.ts"
   },
   "keywords": [
     "ricardo",
     "ricardo.ch",
-    "api",
-    "client",
-    "graphql",
     "search",
-    "auth0",
-    "reverse-engineered",
+    "api",
     "switzerland",
     "classifieds"
   ],

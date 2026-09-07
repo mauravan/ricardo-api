@@ -9,28 +9,11 @@ export interface AppConfig {
   userAgent: string; // User-Agent (WAF checks this — Node's default UA is blocked)
 }
 
-/** Authenticated-account state. Empty for anonymous sessions (v1). This is the
- *  seam for future login: populate it and every subsequent request is authed. */
-export interface AuthState {
-  token: string;
-  refreshToken?: string;
-  expiresAt?: number;
-  accountId?: string;
-}
-
-export interface SessionSnapshot {
-  ricardoHash: string;
-  app: AppConfig;
-  language: string;
-  auth?: AuthState;
-}
-
 export interface SessionOptions {
   /** Per-install device hash. Pass a saved one to pin an account; else random. */
   ricardoHash?: string;
   app?: Partial<AppConfig>;
   language?: string;
-  auth?: AuthState;
 }
 
 const DEFAULT_APP: AppConfig = {
@@ -41,22 +24,23 @@ const DEFAULT_APP: AppConfig = {
   userAgent: "ch.ricardo/android (Google Pixel 7a, OS 16)",
 };
 
-/** Per-account state and the single source of request headers. One Session =
- *  one account; construct several for several accounts. */
+/**
+ * Per-install device identity + header config used by every request.
+ * One instance = one anonymous client. Pass your own `Session` to customise
+ * the device hash, app identity headers, and language.
+ */
 export class Session {
   ricardoHash: string;
   app: AppConfig;
   language: string;
-  auth?: AuthState;
 
   constructor(opts: SessionOptions = {}) {
     this.ricardoHash = opts.ricardoHash ?? uuidv4();
     this.app = { ...DEFAULT_APP, ...opts.app };
     this.language = opts.language ?? "de";
-    this.auth = opts.auth;
   }
 
-  /** Headers for every request. Called per request so auth changes apply at once. */
+  /** Headers for every request. */
   buildHeaders(): Record<string, string> {
     const amzDate = new Date()
       .toISOString()
@@ -74,44 +58,6 @@ export class Session {
       "user-agent": `MobileRicardo (sdk_gphone64_x86_64; android 14) ricardo.ch/9.12.0-91200 (release) deviceId/${this.ricardoHash}`,
       "r-client-unique-id": this.ricardoHash,
       "r-amz-date": amzDate,
-      ...this.authHeaders(),
     };
-  }
-
-  /** Ricardo authenticates via `Cookie: ricardo_session=<token>` for `api/mfa` (verified) and `X-Ricardo-Auth` alias. */
-  protected authHeaders(): Record<string, string> {
-    if (!this.auth?.token) return {};
-    return {
-      "X-Ricardo-Auth": this.auth.token,
-      Cookie: `ricardo_session=${this.auth.token}`,
-    };
-  }
-
-  setAuth(auth: AuthState): void {
-    this.auth = auth;
-  }
-  clearAuth(): void {
-    this.auth = undefined;
-  }
-  get isAuthenticated(): boolean {
-    return Boolean(this.auth?.token);
-  }
-
-  /** Persist a (possibly logged-in) account; restore with `Session.fromJSON`. */
-  toJSON(): SessionSnapshot {
-    return {
-      ricardoHash: this.ricardoHash,
-      app: this.app,
-      language: this.language,
-      auth: this.auth,
-    };
-  }
-  static fromJSON(s: SessionSnapshot): Session {
-    return new Session({
-      ricardoHash: s.ricardoHash,
-      app: s.app,
-      language: s.language,
-      auth: s.auth,
-    });
   }
 }

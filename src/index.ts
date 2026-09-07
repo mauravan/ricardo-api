@@ -1,52 +1,28 @@
 /**
- * Unofficial TypeScript client for the (reverse-engineered) ricardo.ch API.
+ * TypeScript client for ricardo.ch.
  *
  * Entry point: {@link RicardoClient}. Search via {@link SearchBuilder}, read
- * listings/categories/suggestions, authenticate via {@link AccountResource}
- * (Auth0 + swappable {@link CaptchaProvider}), and persist sessions with a
- * {@link SessionStore}.
+ * listings/categories/suggestions, customise the client identity through
+ * {@link Session}.
  *
  * @packageDocumentation
  */
-export {
-  type CaptchaChallenge,
-  type CaptchaProvider,
-  LLMCaptchaProvider,
-  type LLMCaptchaProviderOptions,
-  ManualCaptchaProvider,
-  type ManualCaptchaProviderOptions,
-  parseDataUri,
-} from "./auth/captcha";
-export {
-  DEFAULT_OAUTH,
-  type LoginCredentials,
-  type OAuthConfig,
-  type OAuthTokens,
-  type RawFetch,
-  runLoginFlow,
-} from "./auth/login";
 export { RicardoClient, type RicardoClientOptions } from "./client";
 export {
-  RicardoAuthError,
   RicardoError,
-  RicardoGraphQLError,
   RicardoHttpError,
   RicardoNetworkError,
+  RicardoRateLimitError,
   RicardoValidationError,
 } from "./core/errors";
-export { GraphQLTransport, type Operation } from "./core/graphql";
 export {
   type FetchLike,
   type FetchResponse,
   HttpClient,
   type HttpClientOptions,
 } from "./core/http";
+export { TokenBucket, type TokenBucketOptions } from "./core/rate-limit";
 export * from "./core/types";
-export {
-  AccountResource,
-  type AuthenticatedAccount,
-  type LoginOptions,
-} from "./resources/account";
 export { CategoriesResource } from "./resources/categories";
 export { ListingsResource } from "./resources/listings";
 export {
@@ -57,14 +33,6 @@ export { SearchBuilder, type SearchMode } from "./search/builder";
 export { SearchResult } from "./search/result";
 export {
   type AppConfig,
-  type AuthState,
   Session,
   type SessionOptions,
-  type SessionSnapshot,
 } from "./session/session";
-export {
-  FileSessionStore,
-  InMemorySessionStore,
-  type SessionStore,
-} from "./session/store";
-export { type RenderOptions, renderSvgToPng } from "./svg/render";

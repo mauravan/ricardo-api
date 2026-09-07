@@ -1,5 +1,4 @@
 import type { HttpClient } from "../core/http";
-import type { Session } from "../session/session";
 
 export interface SuggestionOptions {
   /** Stable per-user/device id. Defaults to the session's ricardoHash. */
@@ -10,17 +9,13 @@ export interface SuggestionOptions {
 
 /** Search-box autocomplete suggestions. */
 export class SuggestionsResource {
-  constructor(
-    private readonly http: HttpClient,
-    private readonly session: Session,
-  ) {}
+  constructor(private readonly http: HttpClient) {}
 
   /** Suggestions for a partial query via `POST /m/search` (verified mobile, uses `search_sentence`). */
   async search(
     query: string,
     options: { userIdentifier?: string; first?: number } = {},
   ): Promise<unknown> {
-    void this.session;
     void options.userIdentifier;
     const first = options.first ?? 6;
     try {

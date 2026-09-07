@@ -1,12 +1,11 @@
 /**
- * Demonstrate the read mobile operations. Loads the stored session
- * (run `npm run demo:session` first; otherwise runs anonymously).
+ * Demonstrate the read mobile operations.
  *   npm run demo:queries
  */
-import { loadClient } from "./demo-shared";
+import { RicardoClient } from "./src/index";
 
 async function main(): Promise<void> {
-  const client = await loadClient();
+  const client = new RicardoClient();
 
   // Category taxonomy (mobile GET /m/home)
   const tree = (await client.categories.tree()) as Array<any>;

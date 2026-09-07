@@ -1,6 +1,7 @@
 import { createHash, createHmac } from "node:crypto";
 import type { Session } from "../session/session";
 import { RicardoHttpError, RicardoNetworkError } from "./errors";
+import type { TokenBucket } from "./rate-limit";
 
 export interface FetchResponse {
   ok: boolean;
@@ -27,6 +28,8 @@ export interface HttpClientOptions {
   apiVersion: string; // e.g. v1
   session: Session;
   fetch: FetchLike;
+  /** Optional client-level rate limiter. Acquired before every fetch. */
+  limiter?: TokenBucket;
 }
 
 export interface RequestInit {
@@ -92,6 +95,7 @@ export class HttpClient {
       if (sig) headers["x-authorization"] = sig;
     }
     try {
+      if (this.opts.limiter) await this.opts.limiter.acquire(init.signal);
       return await fetch(this.buildUrl(path, init.query), {
         method,
         headers,
