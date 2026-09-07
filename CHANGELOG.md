@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.2](https://github.com/mauravan/ricardo-api/compare/ricardo-api-v1.2.1...ricardo-api-v1.2.2) (2026-09-07)
+
+
+### Bug Fixes
+
+* restore staged publish (npm stage publish) ([d34202a](https://github.com/mauravan/ricardo-api/commit/d34202a63acb41402f3e275ef2d984f4ecafdd48))
+* update node version in pipeline ([3cb3bab](https://github.com/mauravan/ricardo-api/commit/3cb3bab1c66f894314525efebe9cb8fbf5103c20))
+
 ## [1.2.1](https://github.com/mauravan/ricardo-api/compare/ricardo-api-v1.2.0...ricardo-api-v1.2.1) (2026-09-07)
 
 
