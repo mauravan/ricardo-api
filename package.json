@@ -1,6 +1,6 @@
 {
   "name": "ricardo-api",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Dependency-free TypeScript client for ricardo.ch — keyword and category search, listings, categories, and search suggestions.",
   "type": "module",
   "main": "./dist/index.cjs",
