@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.3](https://github.com/mauravan/ricardo-api/compare/ricardo-api-v1.2.2...ricardo-api-v1.2.3) (2026-09-07)
+
+
+### Bug Fixes
+
+* exclude manifest from biome, restore staged publish ([aa5ba32](https://github.com/mauravan/ricardo-api/commit/aa5ba32cfa71291f4a8cba96f03efbf96d078336))
+
 ## [1.2.2](https://github.com/mauravan/ricardo-api/compare/ricardo-api-v1.2.1...ricardo-api-v1.2.2) (2026-09-07)
 
 
