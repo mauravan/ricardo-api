@@ -6,7 +6,12 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!**/dist", "!**/node_modules"]
+    "includes": [
+      "**",
+      "!**/dist",
+      "!**/node_modules",
+      "!**/.release-please-manifest.json"
+    ]
   },
   "formatter": {
     "enabled": true,
