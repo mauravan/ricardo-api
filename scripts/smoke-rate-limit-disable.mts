@@ -1,18 +1,21 @@
 import { RicardoClient } from "../src/client.ts";
 import { TokenBucket } from "../src/core/rate-limit.ts";
 
-
 // Test #5: rateLimit: false => no limiter instantiated
 const t0 = Date.now();
 const disabled = new RicardoClient({ rateLimit: false });
 const elapsed = Date.now() - t0;
-console.log(`disabled client constructed in ${elapsed}ms; limiter=${disabled.limiter}`);
+console.log(
+  `disabled client constructed in ${elapsed}ms; limiter=${disabled.limiter}`,
+);
 if (disabled.limiter !== undefined) {
   console.error("FAIL: limiter should be undefined");
   process.exit(1);
 }
 if (elapsed > 200) {
-  console.error(`FAIL: construction took ${elapsed}ms (expected <200ms without limiter)`);
+  console.error(
+    `FAIL: construction took ${elapsed}ms (expected <200ms without limiter)`,
+  );
   process.exit(1);
 }
 
@@ -49,14 +52,18 @@ try {
   console.error("FAIL: tokensPerSecond=0 should throw");
   process.exit(1);
 } catch (err) {
-  console.log(`zero rps rejected: ${(err as Error).name}: ${(err as Error).message}`);
+  console.log(
+    `zero rps rejected: ${(err as Error).name}: ${(err as Error).message}`,
+  );
 }
 try {
   new RicardoClient({ rateLimit: { burst: 0 } });
   console.error("FAIL: burst=0 should throw");
   process.exit(1);
 } catch (err) {
-  console.log(`zero burst rejected: ${(err as Error).name}: ${(err as Error).message}`);
+  console.log(
+    `zero burst rejected: ${(err as Error).name}: ${(err as Error).message}`,
+  );
 }
 
 console.log("ALL OK");
