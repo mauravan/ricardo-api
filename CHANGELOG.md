@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.0](https://github.com/mauravan/ricardo-api/compare/ricardo-api-v2.1.1...ricardo-api-v2.2.0) (2026-09-07)
+
+
+### Features
+
+* client-level rate limiting + repo consolidation ([5c1dd2a](https://github.com/mauravan/ricardo-api/commit/5c1dd2af9b1325b7a61a918bf7ee5e02fc3703a7))
+* initial release ([8551423](https://github.com/mauravan/ricardo-api/commit/8551423ea0fbd24a25c1ed2a12d4442ca226b4e9))
+
 ## [2.1.1](https://github.com/mauravan/ricardo-api/compare/ricardo-api-v2.1.0...ricardo-api-v2.1.1) (2026-06-30)
 
 
