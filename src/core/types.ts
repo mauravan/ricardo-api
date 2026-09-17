@@ -10,13 +10,6 @@ export type SortDirection = "asc" | "desc";
 export type GqlSortMode = "TIMESTAMP";
 export type GqlSortDirection = "ASCENDING" | "DESCENDING";
 
-// ---- Locality (from SearchLocalities; also used inside location constraints) ----
-export interface Locality {
-  localityID: string;
-  name: string;
-  localityType?: string;
-}
-
 // ---- Search filter constraints (GraphQL input: ListingSearchConstraints) ----
 // NOTE: element shapes verified against the app's Apollo input adapters
 // (ConstraintsMapperKt / ListingLocationConstraint_InputAdapter).

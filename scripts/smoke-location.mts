@@ -3,7 +3,6 @@ import { RicardoClient } from "../src/client.ts";
 const client = new RicardoClient();
 
 async function smoke() {
-  const locality = { localityID: "39091", name: "Zürich" };
   const baseQuery = "sofa";
 
   const cases = [
@@ -12,12 +11,12 @@ async function smoke() {
       builder: () => client.search(baseQuery),
     },
     {
-      label: "locality",
-      builder: () => client.search(baseQuery).location(locality),
+      label: "zipcode",
+      builder: () => client.search(baseQuery).zipcode("5617"),
     },
     {
-      label: "locality+radius",
-      builder: () => client.search(baseQuery).location(locality).radius(20),
+      label: "zipcode+range",
+      builder: () => client.search(baseQuery).zipcode("5617").range(20),
     },
   ];
 
@@ -64,31 +63,29 @@ async function smoke() {
   }
 
   const baselineRow = results.find((r) => r.label === "baseline");
-  const localityRow = results.find((r) => r.label === "locality");
-  const radiusRow = results.find((r) => r.label === "locality+radius");
+  const zipcodeRow = results.find((r) => r.label === "zipcode");
+  const rangeRow = results.find((r) => r.label === "zipcode+range");
 
-  if (!baselineRow || !localityRow || !radiusRow) {
+  if (!baselineRow || !zipcodeRow || !rangeRow) {
     console.error("FAIL: missing result row");
     process.exit(1);
   }
 
-  const sameAsBaselineLocality =
-    localityRow.totalCount === baselineRow.totalCount &&
-    localityRow.firstId === baselineRow.firstId;
-  const sameAsBaselineRadius =
-    radiusRow.totalCount === baselineRow.totalCount &&
-    radiusRow.firstId === baselineRow.firstId;
+  const sameAsBaselineZipcode =
+    zipcodeRow.totalCount === baselineRow.totalCount &&
+    zipcodeRow.firstId === baselineRow.firstId;
+  const sameAsBaselineRange =
+    rangeRow.totalCount === baselineRow.totalCount &&
+    rangeRow.firstId === baselineRow.firstId;
 
-  if (sameAsBaselineLocality && sameAsBaselineRadius) {
+  if (sameAsBaselineZipcode && sameAsBaselineRange) {
     console.error(
-      "FAIL: locality and radius produce identical results to baseline; fields may be ignored",
+      "FAIL: zipcode and range produce identical results to baseline; fields may be ignored",
     );
     process.exit(1);
   }
 
-  console.log(
-    "OK: location/proximity filtering produces observable differences",
-  );
+  console.log("OK: zipcode/range filtering produces observable differences");
   process.exit(0);
 }
 

@@ -6,7 +6,6 @@ import type {
   Listing,
   ListingImage,
   ListingSearchResult,
-  Locality,
   MobileArticle,
   MobileSearchRequest,
   MobileSearchResponse,
@@ -29,11 +28,10 @@ export class SearchBuilder {
   private _cursor: string | null = null; // offset as string
   private _sort: SortField = "timestamp";
   private _direction: SortDirection = "desc";
-  private _imageHeight = 630;
   private _radius?: number;
-
+  private _imageHeight = 630;
   private _prices: PriceConstraint[] = [];
-  private _localities: Locality[] = [];
+  private _localities: string[] = [];
   private _intervals: IntervalConstraint[] = [];
   private _strings: StringConstraint[] = [];
   constructor(
@@ -68,14 +66,22 @@ export class SearchBuilder {
     return this;
   }
 
-  /** Add a locality (must be constructed manually: `{ localityID: "...", name: "..." }`). Repeatable. */
-  location(locality: Locality): this {
-    this._localities.push(locality);
+  /** 4-digit Swiss zip code filter (e.g. "5617"). */
+  zipcode(zip: string): this {
+    if (!/^\d{4}$/.test(zip)) {
+      throw new RicardoValidationError(
+        `zipcode must be exactly 4 digits, got: ${zip}`,
+      );
+    }
+    this._localities.push(zip);
     return this;
   }
 
-  /** Search radius around the selected localities (as the app sends it, in km). */
-  radius(km: number): this {
+  /** Search radius in kilometers around the selected zip localities (as the app sends it). */
+  range(km: number): this {
+    if (typeof km !== "number" || Number.isNaN(km)) {
+      throw new RicardoValidationError(`range must be a number, got: ${km}`);
+    }
     this._radius = km;
     return this;
   }
@@ -158,9 +164,8 @@ export class SearchBuilder {
       use_attribute_facets: true,
       promo_offer: true,
     };
-    if (this._categoryId) body.category_nr = this._categoryId;
     if (this._localities.length > 0) {
-      body.localities = this._localities.map((l) => l.localityID);
+      body.localities = this._localities;
     }
     if (this._radius != null) {
       body.radius = this._radius;
@@ -168,7 +173,6 @@ export class SearchBuilder {
     return body;
   }
 
-  /** Execute the search and return the first page of results. */
   async fetch(): Promise<SearchResult> {
     const body = this.buildMobileBody();
     const data = (await this.http.request("POST", "/search", {
