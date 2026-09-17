@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.4](https://github.com/mauravan/ricardo-api/compare/ricardo-api-v1.2.3...ricardo-api-v1.2.4) (2026-09-17)
+
+
+### Bug Fixes
+
+* biome ([93be8b1](https://github.com/mauravan/ricardo-api/commit/93be8b1c31e6bb78bf305d34954d99c23b1b317b))
+
 ## [1.2.3](https://github.com/mauravan/ricardo-api/compare/ricardo-api-v1.2.2...ricardo-api-v1.2.3) (2026-09-07)
 
 
