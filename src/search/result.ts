@@ -71,7 +71,8 @@ export class SearchResult {
 
   get galleryListings(): Listing[] {
     return (((this.root as Record<string, unknown>).galleryListings as
-      Listing[] | undefined) ?? []) as Listing[];
+      | Listing[]
+      | undefined) ?? []) as Listing[];
   }
 
   /** Filters available for this query/category (names, labels, options). */
