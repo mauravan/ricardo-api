@@ -68,7 +68,7 @@ export class SearchBuilder {
     return this;
   }
 
-  /** Add a locality (from `client.localities.search()`). Repeatable. */
+  /** Add a locality (must be constructed manually: `{ localityID: "...", name: "..." }`). Repeatable. */
   location(locality: Locality): this {
     this._localities.push(locality);
     return this;
@@ -125,10 +125,8 @@ export class SearchBuilder {
     // Mark unused but keep for compat
     void this._sort;
     void this._imageHeight;
-    void this._radius;
     void this._intervals;
     void this._prices;
-    void this._localities;
     const search_sentence =
       this.mode === "token" ? (this._token ?? "") : (this._query ?? "");
     const offset = parseInt(this._cursor ?? "0", 10) || 0;
@@ -161,18 +159,13 @@ export class SearchBuilder {
       promo_offer: true,
     };
     if (this._categoryId) body.category_nr = this._categoryId;
+    if (this._localities.length > 0) {
+      body.localities = this._localities.map((l) => l.localityID);
+    }
+    if (this._radius != null) {
+      body.radius = this._radius;
+    }
     return body;
-  }
-
-  private buildQuery(): Record<string, string | number | undefined> {
-    const b = this.buildMobileBody();
-    return {
-      searchTerm: b.search_sentence,
-      size: b.limit,
-      offset: b.offset,
-      apiToken: "",
-      category: b.category_nr || undefined,
-    };
   }
 
   /** Execute the search and return the first page of results. */

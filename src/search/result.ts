@@ -69,9 +69,9 @@ export class SearchResult {
     return (this.root.listings?.edges ?? []).map((e) => e.node);
   }
 
-  /** Featured/hero listings returned alongside the result set. */
   get galleryListings(): Listing[] {
-    return (this.root as any).galleryListings ?? [];
+    return (((this.root as Record<string, unknown>).galleryListings as
+      Listing[] | undefined) ?? []) as Listing[];
   }
 
   /** Filters available for this query/category (names, labels, options). */
@@ -144,6 +144,10 @@ export class SearchResult {
 
   /** The raw, unmodeled response root (escape hatch). */
   raw(): ListingSearchResult {
-    return (this.root as any)._raw ?? this.root;
+    return (
+      ((this.root as Record<string, unknown>)._raw as
+        | ListingSearchResult
+        | undefined) ?? this.root
+    );
   }
 }

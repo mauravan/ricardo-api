@@ -34,7 +34,9 @@ async function main(): Promise<void> {
     );
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: demo uses loose typing
   const filters = (result.availableFilters as any[]).map(
+    // biome-ignore lint/suspicious/noExplicitAny: demo uses loose typing
     (f: any) => f.name ?? f.key ?? f,
   );
   if (filters.length) console.log(`\nAvailable filters: ${filters.join(", ")}`);

@@ -141,6 +141,8 @@ export interface MobileSearchRequest {
   member_classes?: string[];
   use_attribute_facets?: boolean;
   promo_offer?: boolean;
+  localities?: string[];
+  radius?: number;
 }
 
 export interface MobileArticle {

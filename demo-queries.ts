@@ -8,13 +8,20 @@ async function main(): Promise<void> {
   const client = new RicardoClient();
 
   // Category taxonomy (mobile GET /m/home)
-  const tree = (await client.categories.tree()) as Array<any>;
+  const treeRaw = await client.categories.tree();
+  const tree = Array.isArray(treeRaw)
+    ? (treeRaw as Array<Record<string, unknown>>)
+    : [];
   console.log(
     `categories.tree: ${tree.length} root categories — ${tree
       .slice(0, 6)
       .map(
-        (c: any) =>
-          c.category_id ?? c.categoryID ?? c.id ?? c.category_name ?? c.name,
+        (c) =>
+          (c.category_id ??
+            c.categoryID ??
+            c.id ??
+            c.category_name ??
+            c.name) as string,
       )
       .join(", ")}`,
   );
@@ -31,19 +38,27 @@ async function main(): Promise<void> {
   console.log(`suggestions.search("sof"): ${flat.length} suggestions`);
 
   // Filters for a category, no listings page (mobile POST /m/search with use_attribute_facets)
-  const uf = (await client.search().category("39091").updateFilters()) as any;
+  const ufRaw = await client.search().category("39091").updateFilters();
+  const uf = ufRaw as Record<string, unknown>;
   const rawFilters =
-    uf.filters ?? uf.attributes ?? (uf as any).availableFilters;
+    (uf.filters as unknown[] | undefined) ??
+    (uf.attributes as unknown[] | undefined) ??
+    (uf.availableFilters as unknown[] | undefined) ??
+    undefined;
   const filterNames = Array.isArray(rawFilters)
-    ? (rawFilters as any[]).map((f: any) => f.name ?? f.key ?? f)
-    : rawFilters
+    ? (rawFilters as Array<Record<string, unknown>>).map(
+        (f) => (f.name ?? f.key ?? f) as string,
+      )
+    : rawFilters && typeof rawFilters === "object"
       ? Object.keys(rawFilters as Record<string, unknown>)
       : [];
   const totalCount =
-    (uf as any).total_count ??
-    (uf as any).totalCount ??
-    (uf as any).totalArticlesCount ??
-    (uf as any).listings?.totalCount ??
+    (uf.total_count as number | undefined) ??
+    (uf.totalCount as number | undefined) ??
+    (uf.totalArticlesCount as number | undefined) ??
+    ((uf.listings as Record<string, unknown> | undefined)?.totalCount as
+      | number
+      | undefined) ??
     0;
   console.log(
     `updateFilters(39091): totalCount=${totalCount}, filters=[${filterNames.join(", ")}]`,
