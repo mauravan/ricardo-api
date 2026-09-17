@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.5](https://github.com/mauravan/ricardo-api/compare/ricardo-api-v1.2.4...ricardo-api-v1.2.5) (2026-09-17)
+
+
+### Bug Fixes
+
+* release ([f128d49](https://github.com/mauravan/ricardo-api/commit/f128d493c15db658539142340d1955fbb6e20414))
+
 ## [1.2.4](https://github.com/mauravan/ricardo-api/compare/ricardo-api-v1.2.3...ricardo-api-v1.2.4) (2026-09-17)
 
 
