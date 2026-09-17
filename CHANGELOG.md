@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/mauravan/ricardo-api/compare/ricardo-api-v1.2.5...ricardo-api-v1.3.0) (2026-09-17)
+
+
+### Features
+
+* update locality to just zipcode ([42ffb9e](https://github.com/mauravan/ricardo-api/commit/42ffb9e6882db4d79ea2ee09772d3ab4c5c3048c))
+
 ## [1.2.5](https://github.com/mauravan/ricardo-api/compare/ricardo-api-v1.2.4...ricardo-api-v1.2.5) (2026-09-17)
 
 
